@@ -3,7 +3,6 @@ import { Route, BrowserRouter, Switch } from "react-router-dom";
 import RouteData from "./routesData";
 
 import LayoutMain from "../hoc/layouts/main";
-
 import { createBrowserHistory } from "history";
 
 const RouteCustom = ({ component: Component, layout: Layout, ...props }) => (
