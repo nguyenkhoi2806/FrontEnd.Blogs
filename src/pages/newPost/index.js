@@ -26,6 +26,10 @@ function NewPost(props) {
         <Form.File name="image" ref={register} />
       </Form.Group>
       <Form.Group>
+        <Form.Label>Image</Form.Label>
+        <Form.File name="introduction" required ref={register} />
+      </Form.Group>
+      <Form.Group>
         <Form.Label>Content</Form.Label>
         <CKEditor
           editor={ClassicEditor}

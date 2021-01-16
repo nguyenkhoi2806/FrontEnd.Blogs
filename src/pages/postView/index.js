@@ -1,7 +1,7 @@
 import React from "react";
 
-import PostHeader from "../../components/postView/header";
-import Comment from "../../components/postView/comment";
+import PostHeader from "./header/header";
+import Comment from "./comment";
 import Search from "../../components/search";
 
 function PostView(props) {
