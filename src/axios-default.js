@@ -1,6 +1,7 @@
-import axios from 'axios';
-const instance = axios.create({
-    baseURL: process.env.REACT_APP_DOMAIN_API,
-});
+import * as Storage from "./services/Storage";
+import axios from "axios";
 
-export default instance;
+axios.defaults.baseURL =  process.env.REACT_APP_DOMAIN_API;
+axios.defaults.headers = Storage.getToken() &&  `Authorization: Bearer ${Storage.getToken()}`
+
+export default axios;
