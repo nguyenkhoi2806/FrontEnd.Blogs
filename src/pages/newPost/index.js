@@ -22,6 +22,10 @@ function NewPost(props) {
         <Form.Control type="text" name="title" ref={register} />
       </Form.Group>
       <Form.Group>
+        <Form.Label>Image</Form.Label>
+        <Form.File name="image" ref={register} />
+      </Form.Group>
+      <Form.Group>
         <Form.Label>Content</Form.Label>
         <CKEditor
           editor={ClassicEditor}
@@ -37,10 +41,6 @@ function NewPost(props) {
             ],
           }}
         />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label>Image</Form.Label>
-        <Form.File name="image" ref={register} />
       </Form.Group>
       <Button variant="primary" type="submit">
         Submit

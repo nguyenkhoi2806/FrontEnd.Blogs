@@ -1,18 +1,16 @@
-import React, { Component } from "react";
+import React from "react";
 import { Container } from "react-bootstrap";
 
-import Header from "./header";
+import Header from "./Header";
 import "./index.scss";
 
-class Layout extends Component {
-  render() {
-    return (
-      <>
-        <Header />
-        <Container>{this.props.children}</Container>
-      </>
-    );
-  }
-}
+function Layout(props) {
 
+  return (
+    <>
+      <Header />
+      <Container>{props.children}</Container>
+    </>
+  );
+}
 export default Layout;

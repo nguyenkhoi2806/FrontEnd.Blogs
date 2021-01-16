@@ -1,5 +1,5 @@
 import React from "react";
-import Auth from "./auth";
+import UserMenu from "./UserMenu";
 
 const Header = (props) => {
   return (
@@ -27,7 +27,7 @@ const Header = (props) => {
                 <span className="sr-only">(current)</span>
               </a>
             </li>
-            <Auth/>
+            <UserMenu/>
           </ul>
         </div>
       </div>
