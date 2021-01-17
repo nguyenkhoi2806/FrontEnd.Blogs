@@ -11,7 +11,7 @@ export const saveUser = (user) => {
 };
 
 export const logout = () => {
-  StorageService.removeToken();
+  StorageService.removeAll();
   return {
     type: actionTypes.LOGOUT,
     user: {},

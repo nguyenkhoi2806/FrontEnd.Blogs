@@ -41,9 +41,12 @@ function LoginForm(props) {
         <Form.Label>Password</Form.Label>
         <Form.Control name="password" ref={register} type="password" />
       </Form.Group>
-      <Button variant="primary" type="submit">
-        Submit
-      </Button>
+
+      <div className="text-right submit-container">
+        <Button variant="primary" type="submit">
+          Login
+        </Button>
+      </div>
     </Form>
   );
 }

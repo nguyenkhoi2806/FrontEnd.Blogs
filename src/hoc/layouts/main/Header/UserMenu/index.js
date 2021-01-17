@@ -46,7 +46,7 @@ function UserMenu(props) {
       {props.isLogin ? (
         <li className="nav-item dropdown">
           <DropdownButton menuAlign="right" title={" Hi " + user.name}>
-            <Dropdown.Item as="button">My Post</Dropdown.Item>
+            <Dropdown.Item as="button"onClick={() => props.history.push('/my-post')} >My Post</Dropdown.Item>
             <Dropdown.Item as="button" onClick={() => props.logout()}>
               Logout
             </Dropdown.Item>

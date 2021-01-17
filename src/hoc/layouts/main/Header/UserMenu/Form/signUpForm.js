@@ -58,9 +58,11 @@ function SingUpForm(props) {
           <Form.Text className="text-danger">{messageError}</Form.Text>
         )}
       </Form.Group>
-      <Button variant="primary" type="submit">
-        Submit
-      </Button>
+      <div className="text-right submit-container">
+        <Button variant="primary" type="submit">
+          Sign up
+        </Button>
+      </div>
     </Form>
   );
 }

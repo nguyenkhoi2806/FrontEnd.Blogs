@@ -1,14 +1,18 @@
 export const saveItem = (key, value) => {
-  window.localStorage.setItem(key, JSON.stringify(value));
+  localStorage.setItem(key, JSON.stringify(value));
 };
 
 export const loadItem = (key) => {
-  let res = JSON.parse(window.localStorage.getItem(key));
-  return res;
+  try {
+    let res = JSON.parse(localStorage.getItem(key));
+    return res;
+  } catch (error) {
+    return null;
+  }
 };
 
 export const removeItem = (key) => {
-  window.localStorage.removeItem(key);
+  localStorage.removeItem(key);
 };
 
 export const getUser = () => {
@@ -16,7 +20,7 @@ export const getUser = () => {
 };
 
 export const getToken = () => {
-  return localStorage.getItem("token");
+  return loadItem("token");
 };
 
 export const saveToken = (token) => {
@@ -29,4 +33,4 @@ export const removeToken = () => {
 
 export const removeAll = () => {
   return localStorage.clear();
-}
+};

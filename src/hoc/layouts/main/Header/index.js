@@ -27,7 +27,7 @@ const Header = (props) => {
                 <span className="sr-only">(current)</span>
               </a>
             </li>
-            <UserMenu/>
+            <UserMenu  {...props.children.props} />
           </ul>
         </div>
       </div>

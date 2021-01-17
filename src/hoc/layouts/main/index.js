@@ -8,7 +8,7 @@ function Layout(props) {
 
   return (
     <>
-      <Header />
+      <Header {...props} />
       <Container>{props.children}</Container>
     </>
   );

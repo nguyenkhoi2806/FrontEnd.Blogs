@@ -5,6 +5,7 @@ export const checkTokenExpiration = () => {
   const token = Storage.getToken();
   if (token === null) return true;
   if (jwt_decode(token).exp < Date.now() / 1000) {
+    Storage.removeAll()
     return true;
   }
 

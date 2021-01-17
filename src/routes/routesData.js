@@ -1,6 +1,7 @@
 import Home from "../pages/home";
 import NewPost from "../pages/newPost";
 import PostView from "../pages/postView";
+import MyPost from "../pages/myPost"
 
 const Route = (props = {}) => {
   class Route {
@@ -28,6 +29,11 @@ const routes = [
   Route({
     path: "/new-post",
     component: NewPost,
+    privateRoute: true,
+  }),
+  Route({
+    path: "/my-post",
+    component: MyPost,
     privateRoute: true,
   }),
   Route({
