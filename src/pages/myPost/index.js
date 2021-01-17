@@ -12,14 +12,14 @@ function MyPost(props) {
   const pageLimit = 4;
 
   useEffect(() => {
-    PostApi.MyPost().then((res) => {
+    PostApi.MyPostList().then((res) => {
       setData(res.posts);
       setTotalPosts(res.totalItems);
     });
   }, []);
 
   function loadDataMyPost(page) {
-    PostApi.MyPost(page).then((res) => {
+    PostApi.MyPostList(page).then((res) => {
       setData(res.posts);
     });
   }
@@ -42,7 +42,12 @@ function MyPost(props) {
   return (
     <div className="my-post-container">
       <div className="card">
-        <div className="card-header">My Post</div>
+        <div className="card-header">
+          <span>My Post</span>
+          <Link className="btn btn-primary" to={"/new-post"}>
+            New Post
+          </Link>
+        </div>
         <div className="card-body">
           {data.length > 0 ? (
             <div className="table-responsive">
@@ -50,7 +55,6 @@ function MyPost(props) {
                 <thead>
                   <tr>
                     <th scope="col">Title</th>
-                    <th scope="col">Introduction</th>
                     <th scope="col">Created date</th>
                     <th></th>
                   </tr>
@@ -80,22 +84,42 @@ function MyPost(props) {
   function TrPost({ post }) {
     return (
       <tr>
-        <td width="300">
-          {post.title.length > 50
-            ? post.title.slice(0, 50) + "..."
-            : post.title}
-        </td>
-        <td width="300">
-          {post.introduction.length > 150
-            ? post.introduction.slice(0, 150) + "..."
-            : post.introduction}
+        <td width="500">
+          <div className="media">
+            <img
+              className="mr-3"
+              width="100"
+              height="100"
+              src={process.env.REACT_APP_DOMAIN_API + post.imageUrl}
+              alt="Generic placeholder image"
+            />
+            <div className="media-body">
+              <strong className="mt-0">
+                {post.title.length > 50
+                  ? post.title.slice(0, 50) + "..."
+                  : post.title}
+              </strong>
+              <br />
+              {post.introduction.length > 150
+                ? post.introduction.slice(0, 150) + "..."
+                : post.introduction}
+            </div>
+          </div>
         </td>
         <td>{moment(post.createdAt).format("MMMM Do YYYY, h:mm:ss a")}</td>
         <td>
           <Link to={"/edit-post/" + post._id} className="btn btn-primary mr-3">
             Edit
           </Link>
-          <button type="button" className="btn btn-danger">
+          <button
+            type="button"
+            className="btn btn-danger"
+            onClick={() => {
+              if (window.confirm("Are you sure?")) {
+                PostApi.DeletePost(post._id);
+                loadDataMyPost();
+              }
+            }}>
             Delete
           </button>
         </td>

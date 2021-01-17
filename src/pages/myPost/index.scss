@@ -1,8 +1,16 @@
 .my-post-container {
+  margin-top: 100px;
   .table {
-    tr { font-size: 17px; }
-    td, .btn {
+    tr {
+      font-size: 17px;
+    }
+    td,
+    .btn {
       font-size: 15px;
     }
+  }
+  .card-header {
+    justify-content: space-between;
+    display: inline-flex;
   }
 }

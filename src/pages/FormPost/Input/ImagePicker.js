@@ -15,6 +15,7 @@ const ImagePicker = props => (
       name={props.name}
       onChange={e => props.onChange(props.id, e.target.value, e.target.files)}
       onBlur={props.onBlur}
+      required={ !props.update }
     />
   </div>
 );

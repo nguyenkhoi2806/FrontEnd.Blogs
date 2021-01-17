@@ -1,5 +1,5 @@
 import Home from "../pages/home";
-import NewPost from "../pages/newPost";
+import FormPost from "../pages/FormPost";
 import PostView from "../pages/postView";
 import MyPost from "../pages/myPost"
 
@@ -28,7 +28,7 @@ const routes = [
   }),
   Route({
     path: "/new-post",
-    component: NewPost,
+    component: FormPost,
     privateRoute: true,
   }),
   Route({
@@ -39,6 +39,11 @@ const routes = [
   Route({
     path: "/post-view/:id",
     component: PostView,
+  }),
+  Route({
+    path: "/edit-post/:id",
+    component: FormPost,
+    privateRoute: true,
   }),
 ];
 

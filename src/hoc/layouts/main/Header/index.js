@@ -6,7 +6,7 @@ const Header = (props) => {
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
       <div className="container">
         <a className="navbar-brand" href="/">
-          ROBUST TECH HOUSE
+          Post Mange
         </a>
         <button
           className="navbar-toggler"

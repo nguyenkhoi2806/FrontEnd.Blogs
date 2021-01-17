@@ -1,40 +1,52 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { Redirect } from "react-router";
 
 import PostHeader from "./header/header";
 import Comment from "./comment";
 import Search from "../../components/search";
+import * as PostApi from "../../api/postApi";
+import "./index.scss"
 
 function PostView(props) {
+  const [post, setPost] = useState({});
+  const [comments, setComments] = useState([]);
+  const [error, setError] = useState(false);
+  const id = props.match.params.id;
+
+  useEffect(() => {
+    loadViewPost();
+  }, []);
+
+  function loadViewPost() {
+    PostApi.GetPostView(id).then((res) => {
+      if (res.post) {
+        setPost(res.post);
+        setComments(res.comments);
+      }
+      else setError(true);
+    });
+  }
+
+  if (error) return <Redirect to="/" />;
+
+  if (Object.keys(post).length === 0) return null;
+
+
   return (
     <div className="post-view-container">
       <div className="row">
         <div className="col-lg-8">
-          <PostHeader />
+          <PostHeader post={post} />
           <div className="post-content text-justify">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus,
-            vero, obcaecati, aut, error quam sapiente nemo saepe quibusdam sit
-            excepturi nam quia corporis eligendi eos magni recusandae laborum
-            minus inventore? Lorem ipsum dolor sit amet, consectetur adipisicing
-            elit. Ut, tenetur natus doloremque laborum quos iste ipsum rerum
-            obcaecati impedit odit illo dolorum ab tempora nihil dicta earum
-            fugiat. Temporibus, voluptatibus. Lorem ipsum dolor sit amet,
-            consectetur adipisicing elit. Eos, doloribus, dolorem iusto
-            blanditiis unde eius illum consequuntur neque dicta incidunt ullam
-            ea hic porro optio ratione repellat perspiciatis. Enim, iure! Lorem
-            ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere
-            erat a ante. Someone famous in Source Title Lorem ipsum dolor sit
-            amet, consectetur adipisicing elit. Error, nostrum, aliquid, animi,
-            ut quas placeat totam sunt tempora commodi nihil ullam alias modi
-            dicta saepe minima ab quo voluptatem obcaecati? Lorem ipsum dolor
-            sit amet, consectetur adipisicing elit. Harum, dolor quis. Sunt, ut,
-            explicabo, aliquam tenetur ratione tempore quidem voluptates
-            cupiditate voluptas illo saepe quaerat numquam recusandae? Qui,
-            necessitatibus, est!
+            <div
+              dangerouslySetInnerHTML={{
+                __html: post.content,
+              }}
+            />
           </div>
-          <Comment/>
-        </div>
-        <div className="col-lg-4">
-            <Search/>
+          <Comment post={post}
+                   loadViewPost={loadViewPost}
+                   comments={comments} />
         </div>
       </div>
     </div>

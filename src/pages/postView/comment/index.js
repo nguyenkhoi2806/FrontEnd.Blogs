@@ -1,6 +1,11 @@
 import React from "react";
+import { useForm } from "react-hook-form";
+import { connect } from "react-redux";
+import moment from "moment";
 
-const CommentPostItem = () => {
+import * as CommentApi from "../../../api/commentApi";
+
+const CommentPostItem = ({ comment }) => {
   return (
     <div className="media pt-2 pb-2 pl-4 pr-4">
       <img
@@ -9,40 +14,76 @@ const CommentPostItem = () => {
         alt=""
       />
       <div className="media-body">
-        <h5 className="mt-0">Commenter Name </h5>
-        <p className="mb-0">
-          Cras sit amet nibh libero, in gravida nulla. Nulla vel metus
-          scelerisque ante sollicitudin. Cras purus odio, vestibulum in
-          vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi
-          vulputate fringilla. Donec lacinia congue felis in faucibus.
-        </p>
-        <small className="text-secondary">1 minute ago</small>
+        <h5 className="mt-0">{comment.creator.name} </h5>
+        <p className="mb-0">{comment.content}</p>
+        <small className="text-secondary">
+          {moment(comment.createdAt).fromNow()}
+        </small>
       </div>
     </div>
   );
 };
 
 function CommentPost(props) {
+  const { register, handleSubmit, reset } = useForm();
+  function submitComment(data) {
+    const dataSubmit = {
+      content: data.content,
+      postId: props.post._id,
+    };
+    CommentApi.SaveComment(dataSubmit).then((res) => {
+      if (res.comment) {
+        props.loadViewPost();
+        reset();
+      }
+    });
+  }
+
   return (
     <div className="comment-container">
       <div className="card my-4">
         <h5 className="card-header">Leave a Comment:</h5>
         <div className="card-body">
-          <form>
-            <div className="form-group">
-              <textarea className="form-control" rows="3"></textarea>
+          {props.isLogin ? (
+            <form onSubmit={handleSubmit(submitComment)}>
+              <div className="form-group">
+                <textarea
+                  className="form-control"
+                  required
+                  name="content"
+                  ref={register}
+                  rows="3"
+                ></textarea>
+              </div>
+              <div className="text-right">
+                <button type="submit" className="btn btn-primary">
+                  Comment
+                </button>
+              </div>
+            </form>
+          ) : (
+            <div className="alert alert-light" role="alert">
+              Please login before comment
             </div>
-            <button type="submit" className="btn btn-primary">
-              Submit
-            </button>
-          </form>
+          )}
         </div>
-        <CommentPostItem />
-        <CommentPostItem />
-        <CommentPostItem />
+        {props.comments &&
+          props.comments.map((comment) => (
+            <CommentPostItem comment={comment} />
+          ))}
       </div>
     </div>
   );
 }
 
-export default CommentPost;
+const mapStateToProps = (state) => {
+  return {
+    user: state.user.user,
+    isLogin: state.user.isLogin,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {};
+};
+export default connect(mapStateToProps, mapDispatchToProps)(CommentPost);

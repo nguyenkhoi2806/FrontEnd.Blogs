@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Form, Alert } from "react-bootstrap";
 import { useForm, Controller } from "react-hook-form";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
@@ -10,12 +10,31 @@ import * as ImageServices from "../../services/Image";
 import * as PostApi from "../../api/postApi";
 import "./index.scss";
 
-function NewPost(props) {
-  const { register, handleSubmit, setValue, control } = useForm();
+const Domain = process.env.REACT_APP_DOMAIN_API;
+
+function FormPost(props) {
+  const { register, handleSubmit, setValue, control, getValues } = useForm();
   const [imagePreview, setImagePreview] = useState(null);
   const [submitError, setSubmitError] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(false);
+  const id = props.match.params.id;
+
+  useEffect(() => {
+    if (id) {
+      PostApi.GetPostEdit(props.match.params.id).then((res) => {
+        if (res.error) setError(true);
+        else {
+          setValue("title", res.post.title);
+          setValue("introduction", res.post.introduction);
+          setValue("content", res.post.content);
+          setValue("image", res.post.imageUrl);
+          setImagePreview(Domain + res.post.imageUrl);
+        }
+      });
+    }
+  }, []);
 
   function submitPost(data) {
     setIsSubmitting(true);
@@ -24,21 +43,26 @@ function NewPost(props) {
     formData.append("content", data.content);
     formData.append("image", data.image);
     formData.append("introduction", data.introduction);
-    PostApi.SavePost(formData).then((res) => {
-      if (res.post) {
-        return setSuccess(true);
-      } else setSubmitError(true);
+    if (id) {
+      PostApi.UpdatePost(formData, id).then((res) => {
+        if (res.post) {
+          return setSuccess(true);
+        } else setSubmitError(true);
 
-      setIsSubmitting(false);
-    });
+        setIsSubmitting(false);
+      });
+    } else {
+      PostApi.CreatePost(formData).then((res) => {
+        if (res.post) {
+          return setSuccess(true);
+        } else setSubmitError(true);
+
+        setIsSubmitting(false);
+      });
+    }
   }
 
-  const contentHandler = (event, editor) => {
-    setValue("content", editor.getData());
-  };
-
   function handleImagePicker(input, value, files) {
-    console.log(files);
     if (files) {
       ImageServices.generateBase64FromImage(files[0])
         .then((b64) => {
@@ -53,8 +77,10 @@ function NewPost(props) {
 
   if (success) return <Redirect to="/my-post" />;
 
+  if (error) return <Redirect to="" />;
+
   return (
-    <Form onSubmit={handleSubmit(submitPost)}>
+    <Form onSubmit={handleSubmit(submitPost)} className="form-post">
       <Form.Group>
         <Form.Label>Title</Form.Label>
         <Form.Control type="text" name="title" required ref={register} />
@@ -77,12 +103,13 @@ function NewPost(props) {
               id="image"
               label="Image"
               onChange={handleImagePicker}
+              update={id ? true : false}
             />
           )}
         />
         {imagePreview && (
           <div className="image-upload">
-            <img src={imagePreview} alt="image" className="" />
+            <img src={imagePreview} alt="image" />
           </div>
         )}
       </Form.Group>
@@ -94,7 +121,11 @@ function NewPost(props) {
           render={({ onChange, value }) => (
             <CKEditor
               editor={ClassicEditor}
-              onChange={contentHandler}
+              onChange={(event, editor) => {
+                const data = editor.getData();
+                onChange(data);
+              }}
+              data={id ? getValues("content") : ""}
               config={{
                 removePlugins: [
                   "Image",
@@ -125,4 +156,4 @@ function NewPost(props) {
   );
 }
 
-export default NewPost;
+export default FormPost;
